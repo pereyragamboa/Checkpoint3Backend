@@ -55,7 +55,7 @@ module.exports = (app) => {
 
 		res.send(respuesta);
 	});
-
+//Get solo un usuario
 	app.get('/api/usuarios/:id', async(req, res) =>{
 		const usuarios = await Usuario.find({ _id: req.params.id });
 		res.send(usuarios);
