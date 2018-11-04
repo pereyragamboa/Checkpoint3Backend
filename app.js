@@ -4,7 +4,9 @@ const mongoose = require('mongoose');
 
 require('./models/Usuarios.js');
 
-mongoose.connect('mongodb://user:password1@ds249583.mlab.com:49583/checkpoint3');
+mongoose.connect(
+  'mongodb://user:password1@ds249583.mlab.com:49583/checkpoint3',
+  { useNewUrlParser: true }); // evita el DeprecationWarning
 
 const app = express();
 
