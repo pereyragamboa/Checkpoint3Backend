@@ -3,14 +3,14 @@ const { Schema } = mongoose;
 
 const usuariosSchema = new Schema({
 
-    "nombreCompleto": {
-        "nombre": String,
-        "apellidoPaterno": String,
-        "apellidoMaterno": {type:String, default:''}
-    },
-    "fechaNacimiento": String,
-    "correo": String,
-    "pasaporte": String
+  nombreCompleto: {
+    nombre: { type: String, trim: true },
+    apellidoPaterno: { type: String, trim: true },
+    apellidoMaterno: { type: String, trim: true, default: '' }
+  },
+  fechaNacimiento: Date,
+  correo: { type: String, trim: true },
+  pasaporte: { type: String, trim: true }
 
 });
 
