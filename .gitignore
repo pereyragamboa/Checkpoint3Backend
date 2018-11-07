@@ -78,5 +78,4 @@ typings/
 # ChikoritaWhip
 examples/
 .idea/
-
-dev.js
+config/dev.js
