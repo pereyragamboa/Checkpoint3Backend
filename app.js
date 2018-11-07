@@ -2,12 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+
 require('./models/Usuarios.js');
 require('./models/Aerolineas');
 
-mongoose.connect(
-  'mongodb://user:password1@ds249583.mlab.com:49583/checkpoint3',
-  { useNewUrlParser: true }); // evita el DeprecationWarning
+const keys = require('./config/keys');
+
+mongoose.connect(keys.mongoNection, { useNewUrlParser: true }); // evita el DeprecationWarning
 
 const app = express();
 
