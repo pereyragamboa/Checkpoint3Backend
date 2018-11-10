@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Aerolinea = mongoose.model('aerolineas');
+const { flotaDuplicada } = require('../lib/aerolineasMiddleware');
 
 module.exports = (app) => {
 
@@ -18,7 +19,9 @@ module.exports = (app) => {
 
   // Agrega una aerolínea.
   app.post(
-    '/api/aerolineas', async (req, res) => {
+    '/api/aerolineas',
+    flotaDuplicada,
+    async (req, res) => {
       console.log("\t=> Preparando aerolínea...");
       const { nombre, nacionalidad, flota } = req.body;
       try {
@@ -34,7 +37,9 @@ module.exports = (app) => {
   );
 
   // Modifica una aerolínea.
-  app.post('/api/aerolineas/:id', async (req, res) => {
+  app.post('/api/aerolineas/:id',
+    flotaDuplicada,
+    async (req, res) => {
     const { nombre, nacionalidad, flota } = req.body;
 
     const respuesta = await Aerolinea.findOneAndUpdate(

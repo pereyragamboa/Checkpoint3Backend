@@ -19,7 +19,7 @@ const aerolineasSchema = new Schema({
       type: String,
       required: MENSAJE_ERROR,
       trim: true,
-      match: "[\\w|-]{2,6}",
+      match: "[A-Z|0-9|-]{2,6}",
       minlength: [2, TAMANHO_MATRICULA],
       maxlength: [10, TAMANHO_MATRICULA] },
     capacidad: {
