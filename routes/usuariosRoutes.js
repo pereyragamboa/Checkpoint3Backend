@@ -1,4 +1,4 @@
-const { getDbConnection } = require('../config/connection');
+const { consultarBD } = require('../config/connection');
 const reportarError = require('../lib/errorHandler');
 const usuariosMiddleware = require ('../lib/usuariosMiddleware');
 
@@ -10,16 +10,12 @@ module.exports = (app) => {
 
   // Get todos los Usuarios
 	app.get('/api/usuarios', async (req,res) => {
-    const connection = await getDbConnection();
-    await connection.query('SELECT * FROM `usuarios`', (error, results) => {
+    await consultarBD('SELECT * FROM `usuarios`', [], (error, results) => {
       if (error) {
         reportarError(res, [error]);
       } else {
         res.send(results);
       }
-    });
-    connection.end(err => {
-      if (err) { console.log(err) }
     });
 	});
 
@@ -28,34 +24,30 @@ module.exports = (app) => {
 		'/api/usuarios',
 		usuariosMiddleware.datosCompletos,
 		usuariosMiddleware.datosPrimitivos,
+    usuariosMiddleware.datosValidos,
     async (req, res) => {
       const {
         nombre, apellidoPaterno, apellidoMaterno,
         correo, fechaNacimiento, pasaporte } = req.body;
-      const connection = await getDbConnection();
-      connection.query(
+      await consultarBD(
         "INSERT INTO `usuarios` (nombre, apellidoPaterno, apellidoMaterno, correo, fechaNacimiento, pasaporte)" +
         "VALUES ( ?, ?, ?, ?, ?, ? );",
-        [nombre, apellidoPaterno, apellidoMaterno, correo, fechaNacimiento, pasaporte],
+        [ nombre.trim(), apellidoPaterno.trim(), apellidoMaterno.trim(),
+          correo.trim(), fechaNacimiento, pasaporte ],
         (error) => {
           if (error) {
-            reportarError([error]);
+            reportarError(res, [error]);
           } else {
             res.send("Usuario agregado exitosamente.");
           }
         }
       );
-      connection.end(err => {
-        if (err) { console.log(err) }
-      });
-      //res.send(respuesta);
     }
   );
 
   //Eliminar usuario
 	app.delete('/api/usuarios/:id', async (req, res) => {
-	  const connection = await getDbConnection();
-	  await connection.query(
+	  await consultarBD(
 	    "DELETE FROM `usuarios` WHERE `IDUsuario` = ?",
       [req.params.id], (error, results) => {
 	      if (error) {
@@ -71,18 +63,18 @@ module.exports = (app) => {
 		'/api/usuarios/:id', 
 		usuariosMiddleware.datosPrimitivos,
 		usuariosMiddleware.datosCompletos,
+		usuariosMiddleware.datosValidos,
 		async (req, res) => {
       const {
         nombre, apellidoPaterno, apellidoMaterno,
         correo, fechaNacimiento, pasaporte } = req.body;
-      const connection = await getDbConnection();
-      connection.query(
+      await consultarBD(
         "UPDATE `usuarios` " +
         "SET `nombre` = ?, `apellidoPaterno` = ?, `apellidoMaterno` = ?, " +
         "`correo` = ?, `fechaNacimiento` = ?, `pasaporte` = ? " +
         "WHERE `IDUsuario` = ?",
-        [nombre, apellidoPaterno, apellidoMaterno,
-          correo, fechaNacimiento, pasaporte, req.params.id],
+        [ nombre.trim(), apellidoPaterno.trim(), apellidoMaterno.trim(),
+          correo.trim(), fechaNacimiento, pasaporte, req.params.id],
         (error, result) => {
           if (error) {
             reportarError(res, [error]);
@@ -91,16 +83,12 @@ module.exports = (app) => {
           }
         }
       );
-      connection.end(err => {
-        if (err) { console.log(err) }
-      });
   	}
   );
 
 	//Get solo un usuario
 	app.get('/api/usuarios/:id', async(req, res) =>{
-    const connection = await getDbConnection();
-    await connection.query(
+    await consultarBD(
       'SELECT * FROM `usuarios` WHERE `IDUsuario` = ?',
       [ req.params.id ], (error, results) => {
       if (error) {
@@ -109,9 +97,5 @@ module.exports = (app) => {
         res.send(results);
       }
     });
-    connection.end(err => {
-      if (err) { console.log(err) }
-    });
 	});
 };
-

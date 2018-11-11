@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 
-async function getDbConnection() {
+async function consultarBD(query, input, callback) {
   let connectionUri = null;
 
   if (process.env.NODE_ENV === 'production') {
@@ -10,7 +10,12 @@ async function getDbConnection() {
   }
   const connection = await mysql.createConnection(connectionUri);
   await connection.connect();
-  return connection;
+
+  await connection.query(query, input, callback);
+
+  connection.end(err => {
+    if (err) { console.log(err) }
+  });
 }
 
-module.exports = { getDbConnection };
+module.exports = { consultarBD };
