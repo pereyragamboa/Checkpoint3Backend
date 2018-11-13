@@ -1,6 +1,7 @@
 const mysql = require('mysql');
+const reportarError = require('../lib/globalMiddleware').reportarError;
 
-async function consultarBD(query, input, callback) {
+async function consultarBD(consulta, parametros, res, mensajeConfirmacion) {
   let connectionUri = null;
 
   if (process.env.NODE_ENV === 'production') {
@@ -11,7 +12,13 @@ async function consultarBD(query, input, callback) {
   const connection = await mysql.createConnection(connectionUri);
   await connection.connect();
 
-  await connection.query(query, input, callback);
+  await connection.query(consulta, parametros, (error, results) => {
+    if (error) {
+      reportarError(res, error);
+    } else {
+      res.send(mensajeConfirmacion ? mensajeConfirmacion : results);
+    }
+  });
 
   connection.end(err => {
     if (err) { console.log(err) }

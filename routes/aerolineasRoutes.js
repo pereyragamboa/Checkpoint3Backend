@@ -1,21 +1,12 @@
 const { consultarBD } = require('../config/connection');
 const middleware = require('../lib/aerolineasMiddleware');
-const reportarError = require('../lib/errorHandler');
 
 module.exports = (app) => {
 
   // Obtiene todas las aerolíneas.
   app.get('/api/aerolineas', async(req, res) => {
     consultarBD(
-      'SELECT * FROM aerolineas', [],
-      (error, results) => {
-        if (error) {
-          reportarError(res, [error])
-        } else {
-          res.send(results);
-        }
-      }
-    )
+      'SELECT * FROM aerolineas', [], res);
   });
 
   // Obtiene la aerolínea con el ID indicado.
@@ -23,14 +14,7 @@ module.exports = (app) => {
     // Consulta la aerolínea
     consultarBD(
       'SELECT * FROM aerolineas WHERE IDAerolinea = ?',
-      [req.params.id], (error, results) => {
-        if (error) {
-          reportarError(res, [error]);
-        } else {
-          res.send(results);
-        }
-      }
-    );
+      [req.params.id], res);
   });
 
   // Obtiene la flota de la aerolínea con el ID indicado.
@@ -38,14 +22,7 @@ module.exports = (app) => {
     // Consulta la flota
     consultarBD(
       'SELECT * FROM flota WHERE IDFlota = ?',
-      [req.params.id], (error, results) => {
-        if (error) {
-          reportarError(res, [error]);
-        } else {
-          res.send(results);
-        }
-      }
-    );
+      [req.params.id], res);
   });
 
   // Agrega una aerolínea.
@@ -56,19 +33,12 @@ module.exports = (app) => {
     middleware.datosValidos,
     async (req, res) => {
       console.log("\t=> Preparando aerolínea...");
-      const { nombre, nacionalidad } = req.body;
+      const {nombre, nacionalidad} = req.body;
       await consultarBD(
         'INSERT INTO aerolineas (nombre, nacionalidad) VALUES ( ?, ? )',
-        [ nombre.trim(), nacionalidad.trim() ], (error) => {
-          if (error) {
-            reportarError(res, [error]);
-          } else {
-            res.send('Aerolínea agregada exitosamente.');
-          }
-        }
-      )
-    }
-  );
+        [nombre.trim(), nacionalidad.trim()],
+        res, 'Aerolínea agregada exitosamente.');
+    });
 
   // Modifica una aerolínea.
   app.post('/api/aerolineas/:id',
@@ -79,14 +49,7 @@ module.exports = (app) => {
       const { nombre, nacionalidad } = req.body;
       await consultarBD(
         'UPDATE aerolineas SET nombre = ?, nacionalidad = ? WHERE IDFlota = ?',
-        [ nombre, nacionalidad, req.params.id ], (error, results) => {
-          if (error) {
-            reportarError(res, [error]);
-          } else {
-            res.send(results);
-          }
-        }
-      )
+        [ nombre, nacionalidad, req.params.id ], res);
   });
 
   // Elimina una aerolínea.
@@ -94,23 +57,9 @@ module.exports = (app) => {
   app.delete('/api/aerolineas/:id', async (req, res) => {
     const idAerolinea = req.params.id;
     await consultarBD(
-      'DELETE FROM flota WHERE IDFlota = ?', [ idAerolinea ],
-      async (error) => {
-        if (error) {
-          reportarError(res, [error]);
-        } else {
-          await consultarBD(
-            'DELETE FROM aerolineas WHERE IDAerolinea = ?', [ idAerolinea ],
-            (error) => {
-              if (error) {
-                reportarError(res, [error]);
-              } else {
-                res.send('Aerolínea eliminada exitosamente.');
-              }
-            }
-          );
-        }
-      }
-    );
+      'DELETE FROM flota WHERE IDFlota = ?', [ idAerolinea ], res);
+    await consultarBD(
+      'DELETE FROM aerolineas WHERE IDAerolinea = ?', [idAerolinea],
+      res, 'Aerolínea eliminada exitosamente.');
   });
 };
