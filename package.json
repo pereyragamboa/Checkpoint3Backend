@@ -6,9 +6,9 @@
   "scripts": {
     "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server" : "nodemon app.js"
+    "server": "nodemon app.js"
   },
-  "engines":{
+  "engines": {
     "node": "8.12.0"
   },
   "author": "",
@@ -16,7 +16,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "mongoose": "^5.3.8",
+    "mysql": "^2.16.0",
     "nodemon": "^1.18.5"
   }
 }
