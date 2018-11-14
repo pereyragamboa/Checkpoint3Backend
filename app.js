@@ -11,6 +11,8 @@ const aerolineasRoutes = require('./routes/aerolineasRoutes');
 aerolineasRoutes(app);
 const flotaRoutes = require('./routes/flotaRoutes');
 flotaRoutes(app);
+const vuelosRoutes = require('./routes/vuelosRoutes');
+vuelosRoutes(app);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);

@@ -40,7 +40,7 @@ module.exports = (app) => {
   //Eliminar usuario
 	app.delete('/api/usuarios/:id', async (req, res) => {
 	  await consultarBD(
-	    "DELETE FROM `usuarios` WHERE `IDUsuario` = ?",
+	    "UPDATE `usuarios` SET activo = 0 WHERE `IDUsuario` = ?",
       [req.params.id], res, "Usuario eliminado exitosamente.");
   });
 

@@ -17,14 +17,6 @@ module.exports = (app) => {
       [req.params.id], res);
   });
 
-  // Obtiene la flota de la aerolínea con el ID indicado.
-  app.get('/api/flota/:id', async(req, res) => {
-    // Consulta la flota
-    consultarBD(
-      'SELECT * FROM flota WHERE IDFlota = ?',
-      [req.params.id], res);
-  });
-
   // Agrega una aerolínea.
   app.post(
     '/api/aerolineas',
@@ -53,13 +45,9 @@ module.exports = (app) => {
   });
 
   // Elimina una aerolínea.
-  // TODO: Revisar transacciones
   app.delete('/api/aerolineas/:id', async (req, res) => {
-    const idAerolinea = req.params.id;
     await consultarBD(
-      'DELETE FROM flota WHERE IDFlota = ?', [ idAerolinea ], res);
-    await consultarBD(
-      'DELETE FROM aerolineas WHERE IDAerolinea = ?', [idAerolinea],
+      'UPDATE aerolineas SET activo = 0 WHERE IDAerolinea = ', [req.params.id],
       res, 'Aerolínea eliminada exitosamente.');
   });
 };

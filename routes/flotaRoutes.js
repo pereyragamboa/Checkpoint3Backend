@@ -16,7 +16,7 @@ module.exports = (app) => {
       [req.params.matricula], res);
   });
 
-  // Agrega un avión.
+  // Agrega un avión a la flota de una aerolínea.
   app.post('/api/flota/:id',
     middleware.datosCompletos,
     middleware.tiposCorrectos,
@@ -32,7 +32,7 @@ module.exports = (app) => {
   // Elimina un avión.
   app.delete('/api/flota/matricula/:id', async (req, res) => {
     await consultarBD(
-      'DELETE FROM flota WHERE matricula = ?', [req.params.id],
+      'UPDATE flota SET activo = 0 WHERE matricula = ?', [req.params.id],
       res, 'Avión eliminado exitosamente.');
   });
 };

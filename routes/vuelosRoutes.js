@@ -35,8 +35,6 @@ module.exports = (app) => {
       res);
   });
 
-  // No es posible eliminar un vuelo
-
   // Obtener lista de estados de vuelo
   app.get('/api/vuelos/estados', (req, res) =>
     consultarBD('SELECT * FROM estados', [], res)
