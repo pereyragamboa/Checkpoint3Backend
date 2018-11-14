@@ -47,7 +47,7 @@ module.exports = (app) => {
   // Elimina una aerolínea.
   app.delete('/api/aerolineas/:id', async (req, res) => {
     await consultarBD(
-      'UPDATE aerolineas SET activo = 0 WHERE IDAerolinea = ', [req.params.id],
+      'UPDATE aerolineas SET activo = NOT activo WHERE IDAerolinea = ', [req.params.id],
       res, 'Aerolínea eliminada exitosamente.');
   });
 };
