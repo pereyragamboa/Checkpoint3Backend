@@ -1,13 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-
-const keys = require('./config/keys');
-require('./models/Usuarios.js');
-require('./models/Aerolineas');
-
-mongoose.connect(keys.mongoConnection,
-  { useNewUrlParser: true }); // evita el DeprecationWarning
 
 const app = express();
 
