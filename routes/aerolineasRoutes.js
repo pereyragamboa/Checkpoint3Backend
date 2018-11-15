@@ -11,6 +11,7 @@ module.exports = (app) => {
 
   // Obtiene la aerolínea con el ID indicado.
   app.get('/api/aerolineas/:id', async(req, res) => {
+
     // Consulta la aerolínea
     consultarBD(
       'SELECT * FROM aerolineas WHERE IDAerolinea = ?',
