@@ -22,17 +22,25 @@ module.exports = (app) => {
     middleware.tiposCorrectos,
     middleware.datosValidos,
     async (req, res) => {
-    const { matricula, capacidad } = req.body;
-    await consultarBD(
-      'INSERT INTO flota (idFlota, matricula, capacidad) VALUES (?, ?, ?)',
-      [ req.params.id, matricula, capacidad ],
-      res, 'Avión agregado exitosamente.');
-  });
+      const { matricula, capacidad } = req.body;
+      await consultarBD(
+        'INSERT INTO flota (idFlota, matricula, capacidad) VALUES (?, ?, ?)',
+        [ req.params.id, matricula, capacidad ],
+        res, 'Avión agregado exitosamente.');
+    });
+
+  app.post('/api/flota/matricula/:matricula',
+    middleware.revisarCapacidad,
+    async (req, res) => {
+      await consultarBD(
+        'UPDATE flota (capacidad) VALUES (?)', [req.body.capacidad],
+        res, 'Avión modificado exitosamente.');
+    });
 
   // Elimina un avión.
   app.delete('/api/flota/matricula/:id', async (req, res) => {
     await consultarBD(
       'DELETE FROM flota WHERE matricula = ?', [req.params.id],
       res, 'Avión eliminado exitosamente.');
-  });
+    });
 };
