@@ -39,4 +39,5 @@ module.exports = (app) => {
   app.get('/api/vuelos/estados', (req, res) =>
     consultarBD('SELECT * FROM estados', [], res)
   );
+
 };
