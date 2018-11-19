@@ -29,14 +29,7 @@ module.exports = (app) => {
         res, 'Avión agregado exitosamente.');
     });
 
-  app.post('/api/flota/matricula/:matricula',
-    middleware.revisarCapacidad,
-    async (req, res) => {
-      await consultarBD(
-        'UPDATE flota (capacidad) VALUES (?)', [req.body.capacidad],
-        res, 'Avión modificado exitosamente.');
-    });
-
+  // Modifica un avión.
   app.post('/api/flota/matricula/:matricula',
     middleware.revisarCapacidad,
     async (req, res) => {

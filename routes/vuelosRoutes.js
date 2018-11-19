@@ -1,4 +1,5 @@
 const { consultarBD } = require('../config/connection');
+const middleware = require('../lib/vuelosMiddleware');
 
 module.exports = (app) => {
   // Obtener todos los vuelos
@@ -12,27 +13,37 @@ module.exports = (app) => {
   });
 
   // Agregar un vuelo
-  app.post('/api/vuelos/', (req, res) => {
-    const { matricula, fechaSalida, fechaLlegada, origen, destino, ruta, estado } = req.body;
-    consultarBD(
-      'INSERT into VUELOS ' +
-      '(matriculaID, fechaSalida, fechaLlegada, origen, destino, ruta, IDEstado) ' +
-      'VALUES ( ?, ?, ?, ?, ?, ?, ? )',
-      [ matricula, fechaSalida, fechaLlegada, origen, destino, ruta, estado ],
-      res, "Vuelo agregado exitosamente."
-    );
+  app.post('/api/vuelos/',
+    middleware.datosCompletos,
+    middleware.tiposCorrectos,
+    middleware.datosValidos,
+    (req, res) => {
+      const { matriculaID, fechaSalida, fechaLlegada, origen, destino, ruta, idEstado } = req.body;
+      consultarBD(
+        'INSERT into VUELOS ' +
+        '(matriculaID, fechaSalida, fechaLlegada, origen, destino, ruta, IDEstado) ' +
+        'VALUES ( ?, ?, ?, ?, ?, ?, ? )',
+        [ matriculaID, fechaSalida, fechaLlegada,
+          origen.trim(), destino.trim(), ruta.trim().toUpperCase(), idEstado ],
+        res, "Vuelo agregado exitosamente."
+      );
   });
 
   // Modificar un vuelo
-  app.post('/api/vuelos/:id', (req, res) => {
-    const { matricula, fechaSalida, fechaLlegada, origen, destino, ruta, estado } = req.body;
-    consultarBD(
-      'UPDATE vuelos SET ' +
-      'matriculaID = ?, fechaSalida = ?, fechaLlegada = ?, origen = ?, destino = ?, ' +
-      'ruta = ?, IDEstado = ? ' +
-      'WHERE IDVuelo = ?',
-      [ matricula, fechaSalida, fechaLlegada, origen, destino, ruta, estado, req.params.id ],
-      res);
+  app.post('/api/vuelos/:id',
+    middleware.datosCompletos,
+    middleware.tiposCorrectos,
+    middleware.datosValidos,
+    (req, res) => {
+      const { matriculaID, fechaSalida, fechaLlegada, origen, destino, ruta, idEstado } = req.body;
+      consultarBD(
+        'UPDATE vuelos SET ' +
+        'matriculaID = ?, fechaSalida = ?, fechaLlegada = ?, origen = ?, destino = ?, ' +
+        'ruta = ?, IDEstado = ? ' +
+        'WHERE IDVuelo = ?',
+        [ matriculaID, fechaSalida, fechaLlegada, origen.trim(),
+          destino.trim(), ruta.trim().toUpperCase(), idEstado, req.params.id ],
+        res, "Vuelo modificado exitosamente.");
   });
 
   // Obtener lista de estados de vuelo
