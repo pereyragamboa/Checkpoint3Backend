@@ -14,7 +14,7 @@ async function consultarBD(consulta, parametros, res, mensajeConfirmacion) {
 
   await connection.query(consulta, parametros, (error, results) => {
     if (error) {
-      reportarError(res, error);
+      reportarError(res, [ error ]);
     } else {
       res.send(mensajeConfirmacion ? mensajeConfirmacion : results);
     }

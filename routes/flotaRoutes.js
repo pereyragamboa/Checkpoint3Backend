@@ -1,4 +1,4 @@
-const { consultarBD } = require('../config/connection');
+ const { consultarBD } = require('../config/connection');
 const middleware = require('../lib/flotaMiddleware');
 
 module.exports = (app) => {
@@ -22,17 +22,26 @@ module.exports = (app) => {
     middleware.tiposCorrectos,
     middleware.datosValidos,
     async (req, res) => {
-    const { matricula, capacidad } = req.body;
-    await consultarBD(
-      'INSERT INTO flota (idFlota, matricula, capacidad) VALUES (?, ?, ?)',
-      [ req.params.id, matricula, capacidad ],
-      res, 'Avión agregado exitosamente.');
+      const { matricula, capacidad } = req.body;
+      await consultarBD(
+        'INSERT INTO flota (idFlota, matricula, capacidad) VALUES (?, ?, ?)',
+        [ req.params.id, matricula, capacidad ],
+        res, 'Avión agregado exitosamente.');
+    });
+
+  // Modifica un avión.
+  app.post('/api/flota/matricula/:matricula',
+    middleware.revisarCapacidad,
+    async (req, res) => {
+      await consultarBD(
+        'UPDATE flota (capacidad) VALUES (?)', [req.body.capacidad],
+        res, 'Avión modificado exitosamente.');
   });
 
   // Elimina un avión.
   app.delete('/api/flota/matricula/:id', async (req, res) => {
     await consultarBD(
-      'UPDATE flota SET activo = 0 WHERE matricula = ?', [req.params.id],
+      'UPDATE flota SET activo = NOT activo WHERE matricula = ?', [req.params.id],
       res, 'Avión eliminado exitosamente.');
-  });
+    });
 };

@@ -11,7 +11,6 @@ module.exports = (app) => {
 
   // Obtiene la aerolínea con el ID indicado.
   app.get('/api/aerolineas/:id', async(req, res) => {
-
     // Consulta la aerolínea
     consultarBD(
       'SELECT * FROM aerolineas WHERE IDAerolinea = ?',
@@ -42,13 +41,13 @@ module.exports = (app) => {
       const { nombre, nacionalidad } = req.body;
       await consultarBD(
         'UPDATE aerolineas SET nombre = ?, nacionalidad = ? WHERE IDFlota = ?',
-        [ nombre, nacionalidad, req.params.id ], res);
+        [ nombre, nacionalidad, req.params.id ], res, "Aerolínea modificada exitosamente.");
   });
 
   // Elimina una aerolínea.
   app.delete('/api/aerolineas/:id', async (req, res) => {
     await consultarBD(
-      'UPDATE aerolineas SET activo = 0 WHERE IDAerolinea = ', [req.params.id],
+      'UPDATE aerolineas SET activo = NOT activo WHERE IDAerolinea = ', [req.params.id],
       res, 'Aerolínea eliminada exitosamente.');
   });
 };

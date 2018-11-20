@@ -40,7 +40,7 @@ module.exports = (app) => {
   //Eliminar usuario
 	app.delete('/api/usuarios/:id', async (req, res) => {
 	  await consultarBD(
-	    "UPDATE `usuarios` SET activo = 0 WHERE `IDUsuario` = ?",
+	    "UPDATE `usuarios` SET activo = NOT activo WHERE `IDUsuario` = ?",
       [req.params.id], res, "Usuario eliminado exitosamente.");
   });
 
@@ -62,7 +62,7 @@ module.exports = (app) => {
         "WHERE `IDUsuario` = ?",
         [ nombre.trim(), apellidoPaterno.trim(), apellidoMaterno.trim(),
           correo.trim(), fechaNacimiento, pasaporte, req.params.id],
-        res
+        res, "Usuario modificado exitosamente."
       );
   	}
   );
@@ -78,7 +78,8 @@ module.exports = (app) => {
 	// Obtener lista de vuelos del usuario
   app.get('/api/usuarios/:id/vuelos', async(req, res) => {
     await consultarBD(
-      'select m.idVuelo, v.fechaSalida, v.origen,v.destino from manifiesto m inner join vuelos v on m.idVuelo = v.IDVuelo WHERE m.IDUsuario = ? ',
+      'select m.idVuelo, v.fechaSalida, v.origen from manifiesto m' +
+			' inner join vuelos v on m.idVuelo = v.IDVuelo WHERE m.IDUsuario = ? ',
       [req.params.id], res
       );
   });
