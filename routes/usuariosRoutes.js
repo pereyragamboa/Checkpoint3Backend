@@ -78,7 +78,7 @@ module.exports = (app) => {
 	// Obtener lista de vuelos del usuario
   app.get('/api/usuarios/:id/vuelos', async(req, res) => {
     await consultarBD(
-      'select m.idVuelo, v.fechaSalida, v.origen from manifiesto m inner join vuelos v on m.idVuelo = v.IDVuelo WHERE m.IDUsuario = ? ',
+      'select m.idVuelo, v.fechaSalida, v.origen,v.destino from manifiesto m inner join vuelos v on m.idVuelo = v.IDVuelo WHERE m.IDUsuario = ? ',
       [req.params.id], res
       );
   });
