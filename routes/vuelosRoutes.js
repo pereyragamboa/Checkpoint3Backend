@@ -51,4 +51,27 @@ module.exports = (app) => {
     consultarBD('SELECT * FROM estados', [], res)
   );
 
+  // Obtener manifiesto de vuelo
+  app.get('/api/vuelos/:id/manifiesto', (req, res) =>
+    consultarBD(
+      'SELECT u.IDUsuario, u.nombre, u.apellidoPaterno, u.apellidoMaterno FROM usuarios u ' +
+      'JOIN manifiesto m WHERE u.IDUsuario = m.IDUsuario AND m.IDVuelo = ?',
+      [ req.params.id ], res)
+  );
+
+  app.post('/api/vuelos/:id/manifiesto', (req, res) =>
+    consultarBD(
+      "INSERT INTO manifiesto (IDVuelo, IDUsuario) VALUES (?, ?)",
+      [ req.params.id, req.body.idUsuario ], res,
+      "Usuario agregado exitosamente al manifiesto."
+    )
+  );
+
+  app.delete('/api/vuelos/:id/manifiesto/:uid', (req, res) =>
+    consultarBD(
+      "DELETE from manifiesto WHERE IDUsuario = ? AND IDVuelo = ?",
+      [ req.params.id, req.params.uid ], res,
+      "Usuario eliminado exitosamente del manifiesto."
+    )
+  );
 };
