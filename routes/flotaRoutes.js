@@ -5,7 +5,7 @@ module.exports = (app) => {
   // Obtiene la flota de una aerolínea.
   app.get('/api/flota/:id', async (req, res) => {
     consultarBD(
-      'SELECT * FROM flota WHERE IDFlota = ?',
+      'SELECT * FROM flota WHERE IDFlota = ? AND activo = 1',
       [req.params.id], res);
   });
 

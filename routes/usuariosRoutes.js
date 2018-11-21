@@ -10,7 +10,7 @@ module.exports = (app) => {
 
   // Get todos los Usuarios
 	app.get('/api/usuarios', async (req, res) => {
-    await consultarBD('SELECT * FROM `usuarios`', [], res);
+    await consultarBD('SELECT * FROM `usuarios` WHERE activo = 1', [], res);
 	});
 
 	//Enviar nuevo Usuario
