@@ -6,7 +6,7 @@ module.exports = (app) => {
   // Obtiene todas las aerolíneas.
   app.get('/api/aerolineas', async(req, res) => {
     consultarBD(
-      'SELECT * FROM aerolineas', [], res);
+      'SELECT * FROM aerolineas WHERE activo = 1', [], res);
   });
 
   // Obtiene la aerolínea con el ID indicado.

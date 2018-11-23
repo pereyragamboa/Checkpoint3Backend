@@ -52,8 +52,8 @@ module.exports = (app) => {
   });
 
   // Obtener lista de estados de vuelo
-  app.get('/api/vuelos/estados', (req, res) =>
-    consultarBD('SELECT * FROM estados', [], res)
+  app.get('/api/estados', (req, res) =>
+    consultarBD('select * from estados', [], res)
   );
 
   // Obtener manifiesto de vuelo

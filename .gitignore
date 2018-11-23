@@ -79,3 +79,4 @@ typings/
 examples/
 .idea/
 config/dev.js
+logs.txt
