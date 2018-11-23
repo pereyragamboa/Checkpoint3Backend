@@ -12,6 +12,11 @@ module.exports = (app) => {
     consultarBD('SELECT * FROM vuelos WHERE IDVuelo = ?', [req.params.id], res);
   });
 
+    // Obtener usuario con # pasaporte
+    app.get('/api/vuelos/usuario/:pasaporte', (req, res) => {
+    consultarBD('SELECT * FROM vuelos WHERE pasaporte = ?', [req.params.pasaporte], res);
+  });
+
   // Agregar un vuelo
   app.post('/api/vuelos/',
     middleware.datosCompletos,
