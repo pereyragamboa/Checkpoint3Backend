@@ -14,7 +14,7 @@ module.exports = (app) => {
 
     // Obtener usuario con # pasaporte
     app.get('/api/vuelos/usuario/:pasaporte', (req, res) => {
-    consultarBD('SELECT * FROM vuelos WHERE pasaporte = ?', [req.params.pasaporte], res);
+    consultarBD('SELECT * FROM usuarios WHERE pasaporte = ?', [req.params.pasaporte], res);
   });
 
   // Agregar un vuelo
